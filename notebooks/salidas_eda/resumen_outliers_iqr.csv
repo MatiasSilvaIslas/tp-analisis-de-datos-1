@@ -1,0 +1,9 @@
+﻿tabla,variable,registros,outliers,porcentaje_outliers
+fact_accesos_provincia,accesos_total,1056,176,16.67
+fact_accesos_categoria_localidad,accesos,24990,3750,15.01
+fact_accesos_tecnologia_localidad,accesos,12100,1793,14.82
+fact_accesos_categoria_provincia,accesos,20737,2818,13.59
+fact_accesos_tecnologia,accesos,5280,573,10.85
+fact_penetracion_provincia,accesos_100_habitantes,1056,41,3.88
+fact_velocidad_provincia,mbps_media,1056,30,2.84
+fact_penetracion_provincia,accesos_100_hogares,1056,21,1.99

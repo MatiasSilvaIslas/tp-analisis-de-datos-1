@@ -1,0 +1,5 @@
+1. Entre 2014-T1 y 2024-T4, los accesos aumentaron un 86.38%.
+2. El máximo de accesos se registró en 2024-T4, con 11,925,620 conexiones.
+3. En 2024-T4, CABA presentó la mayor penetración (105.26 accesos cada 100 hogares), mientras que Formosa registró la menor (31.92). La brecha fue de 73.34 accesos cada 100 hogares.
+4. En 2024-T4, la fibra óptica representó el 40.88% de los accesos clasificados por tecnología.
+5. La correlación de Spearman entre participación de fibra óptica y velocidad media provincial fue de 0.160, indicando una asociación positiva de magnitud débil.
