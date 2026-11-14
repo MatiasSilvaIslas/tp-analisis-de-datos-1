@@ -53,7 +53,7 @@ conectividad-fija-argentina/
 
 ## Requisitos
 
-- Python 3.10 o superior.
+- Python 3.10 a 3.14 para las versiones actuales de pandas y las demás dependencias.
 - Navegador moderno (Chrome, Firefox, Edge o Safari).
 - Conexión a Internet para cargar Chart.js y las fuentes tipográficas desde sus CDN/servicios externos.
 
@@ -116,6 +116,30 @@ Ejecutar una consulta puntual, por ejemplo el ranking de penetración:
     python scripts/run_sql_queries.py --query 4
 
 El diseño, la auditoría y la interpretación de resultados están en docs/MODELO_DATOS.md, docs/AUDITORIA_DATOS.md y docs/CONSULTAS_SQL.md.
+
+### Notebook de análisis exploratorio (EDA)
+
+Con el entorno `.venv` activado según el paso 1, ejecutar desde la raíz del repo para que el notebook y su kernel usen ese mismo intérprete:
+
+**Windows (PowerShell):**
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python scripts/load_sqlite.py
+python -m jupyter notebook notebooks/02_EDA_conectividad_fija_v2.ipynb
+```
+
+**Linux/macOS:**
+
+```bash
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/load_sqlite.py
+python -m jupyter notebook notebooks/02_EDA_conectividad_fija_v2.ipynb
+```
+
+En VS Code/Jupyter, seleccionar el intérprete de `.venv` como kernel. El notebook encuentra `database/conectividad.db` desde la raíz del repo o desde `notebooks/` y la abre en modo solo lectura. Las tablas de resultados se guardan en `notebooks/salidas_eda/`.
 
 ### 3. Iniciar el servidor web local
 
