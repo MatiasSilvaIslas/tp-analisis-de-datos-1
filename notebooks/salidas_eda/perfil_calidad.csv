@@ -1,0 +1,8 @@
+﻿tabla,filas,columnas,celdas_nulas,porcentaje_celdas_nulas,filas_con_clave_duplicada,criterio_duplicados
+fact_accesos_provincia,1056,6,0,0.0,0,anio + trimestre + provincia_id
+fact_accesos_tecnologia,5280,7,0,0.0,0,anio + trimestre + provincia_id + tecnologia_id
+fact_velocidad_provincia,1056,6,0,0.0,0,anio + trimestre + provincia_id
+fact_penetracion_provincia,1056,7,0,0.0,0,anio + trimestre + provincia_id
+fact_accesos_categoria_provincia,20737,7,0,0.0,0,anio + trimestre + provincia_id + categoria_velocidad_id
+fact_accesos_tecnologia_localidad,12100,4,0,0.0,0,localidad_id + tecnologia_id
+fact_accesos_categoria_localidad,24990,4,0,0.0,0,localidad_id + categoria_velocidad_id
