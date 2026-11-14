@@ -24,15 +24,28 @@ conectividad-fija-argentina/
 ├── js/
 │   └── app.js                    # Filtros, indicadores y gráficos
 ├── data/
-│   ├── raw/                      # Los seis CSV originales de ENACOM
+│   ├── raw/                      # Única copia maestra de los CSV originales
+│   ├── modified/                 # Seis CSV normalizados, regenerables desde raw/
 │   └── processed/
 │       └── dashboard.json        # Datos normalizados que consume el navegador
 ├── scripts/
-│   └── process_data.py           # Limpieza, validación y transformación
+│   ├── process_data.py           # Limpieza, validación y transformación del dashboard
+│   ├── load_sqlite.py            # Reconstrucción de la base SQLite desde los CSV
+│   └── run_sql_queries.py        # Ejecución de consultas analíticas numeradas
+├── sql/
+│   ├── 01_schema.sql
+│   ├── 02_transform.sql
+│   ├── 03_quality_checks.sql
+│   └── 04_analysis_queries.sql
+├── database/
+│   └── conectividad.db           # Base reconstruible desde data/raw/
 ├── docs/
 │   ├── METODOLOGIA.md            # Decisiones metodológicas y limitaciones
 │   ├── DICCIONARIO_DE_DATOS.md   # Descripción de fuentes y campos
-│   └── ANALISIS_INICIAL.md       # Comparación descriptiva 2014-T1 vs 2024-T4
+│   ├── ANALISIS_INICIAL.md       # Comparación descriptiva 2014-T1 vs 2024-T4
+│   ├── AUDITORIA_DATOS.md
+│   ├── MODELO_DATOS.md
+│   └── CONSULTAS_SQL.md
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -84,6 +97,26 @@ python scripts/process_data.py
 
 El script lee los seis CSV de `data/raw/`, limita los datos históricos a 2014–2024 y vuelve a generar `data/processed/dashboard.json`.
 
+### Base SQLite y consultas SQL
+
+Reconstruir la base SQLite y seis CSV normalizados desde los seis archivos
+maestros de `data/raw/`. El cargador no modifica los originales; regenera los
+CSV derivados en `data/modified/` y la base en `database/conectividad.db`:
+
+    python scripts/load_sqlite.py
+
+El cargador valida los CSV y escribe database/conectividad.db solo cuando la carga y los controles terminan correctamente. No es necesario regenerar primero el JSON del dashboard.
+
+Ejecutar las ocho consultas y mostrar cada fila como JSON:
+
+    python scripts/run_sql_queries.py
+
+Ejecutar una consulta puntual, por ejemplo el ranking de penetración:
+
+    python scripts/run_sql_queries.py --query 4
+
+El diseño, la auditoría y la interpretación de resultados están en docs/MODELO_DATOS.md, docs/AUDITORIA_DATOS.md y docs/CONSULTAS_SQL.md.
+
 ### 3. Iniciar el servidor web local
 
 No abrir `index.html` directamente con doble clic: el navegador puede bloquear la lectura del JSON por políticas de seguridad. Desde la raíz del proyecto ejecutar:
@@ -130,7 +163,11 @@ GitHub Pages publicará el sitio en una URL con el formato `https://USUARIO.gith
 
 ## Fuentes y tratamiento
 
-Los CSV originales están guardados sin modificar en `data/raw/`. El script de procesamiento interpreta los separadores numéricos usados en los archivos argentinos, normaliza los nombres de provincias, filtra el período y genera las estructuras que utiliza el dashboard.
+Los CSV originales se conservan sin modificar en `data/raw/`, que es la única
+copia maestra. `scripts/load_sqlite.py` genera los CSV normalizados de
+`data/modified/` y la base SQLite de forma reproducible. El script del dashboard
+lee los archivos de `data/raw/`, interpreta los separadores numéricos usados
+en Argentina, normaliza provincias y genera `data/processed/dashboard.json`.
 
 **Fuentes incluidas:**
 
