@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dashboard interactivo sobre la evolución de la conectividad fija en Argentina entre 2014 y 2024, elaborado con datos de ENACOM.">
+  <title>Conectividad fija en Argentina | 2014–2024</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Inicio">
+        <span class="brand-mark">↗</span>
+        <span>DATOS<span class="brand-muted">ABIERTOS</span></span>
+      </a>
+      <div class="topbar-meta"><span class="live-dot"></span> Análisis histórico · ENACOM</div>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">INFRAESTRUCTURA DIGITAL · ARGENTINA</p>
+          <h1>Conectividad fija<br><span>en Argentina</span></h1>
+          <p class="hero-description">Evolución del acceso, las tecnologías y la calidad de la conexión a Internet.</p>
+          <div class="hero-tags"><span>2014 — 2024</span><span>24 jurisdicciones</span><span>Datos de ENACOM</span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="signal signal-a">●</div><div class="signal signal-b">●</div><div class="signal signal-c">●</div>
+          <div class="hero-core"><span>AR</span><small>conectada</small></div>
+          <div class="hero-stat"><strong>11</strong><span>años de análisis</span></div>
+        </div>
+      </section>
+
+      <section class="filter-panel" aria-label="Filtros del dashboard">
+        <div class="filter-heading"><div><p class="eyebrow">EXPLORAR DATOS</p><h2>Filtros</h2></div><button id="resetFilters" class="reset-button" type="button">↺ Restablecer</button></div>
+        <div class="filter-grid">
+          <label class="filter-field"><span>Año</span><select id="yearFilter"><option value="all">Todos (2014–2024)</option></select></label>
+          <label class="filter-field"><span>Trimestre</span><select id="quarterFilter"><option value="all">Todos los trimestres</option><option value="1">1.er trimestre</option><option value="2">2.º trimestre</option><option value="3">3.er trimestre</option><option value="4">4.º trimestre</option></select></label>
+          <label class="filter-field"><span>Provincia</span><select id="provinceFilter"><option value="all">Argentina (total nacional)</option></select></label>
+        </div>
+        <p class="filter-note">Los filtros actualizan los indicadores y las series históricas. Las comparaciones provinciales muestran todas las jurisdicciones para el período seleccionado.</p>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><p class="eyebrow">PANORAMA GENERAL</p><h2>Indicadores clave</h2></div><span id="periodLabel" class="period-chip">Todos los períodos · 2014–2024</span></div>
+        <div class="kpi-grid">
+          <article class="kpi-card"><div class="kpi-top"><span>Accesos a Internet fijo</span><span class="kpi-icon">⌁</span></div><strong id="kpiAccess">—</strong><small id="kpiAccessNote">Total de accesos registrados</small></article>
+          <article class="kpi-card"><div class="kpi-top"><span>Participación de fibra</span><span class="kpi-icon">◉</span></div><strong id="kpiFiber">—</strong><small id="kpiFiberNote">Fibra óptica sobre el total de accesos</small></article>
+          <article class="kpi-card"><div class="kpi-top"><span>Velocidad media de descarga</span><span class="kpi-icon">⇧</span></div><strong id="kpiSpeed">—</strong><small id="kpiSpeedNote">Estimación ponderada por accesos provinciales</small></article>
+          <article class="kpi-card"><div class="kpi-top"><span>Penetración en hogares</span><span class="kpi-icon">⌂</span></div><strong id="kpiPenetration">—</strong><small id="kpiPenetrationNote">Seleccioná una provincia para consultar</small></article>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><p class="eyebrow">EVOLUCIÓN TEMPORAL</p><h2>Cómo cambió la conectividad</h2></div><p class="section-aside">Series trimestrales · 2014–2024</p></div>
+        <div class="chart-grid chart-grid-main">
+          <article class="chart-card chart-card-wide"><div class="chart-title"><div><h3>Evolución de los accesos</h3><p>Accesos totales y accesos de fibra óptica</p></div><span class="chart-index">01</span></div><div class="chart-wrap"><canvas id="accessChart"></canvas></div></article>
+          <article class="chart-card"><div class="chart-title"><div><h3>Composición tecnológica</h3><p>Participación de cada tecnología</p></div><span class="chart-index">02</span></div><div class="chart-wrap"><canvas id="technologyChart"></canvas></div><div id="techLegend" class="custom-legend"></div></article>
+          <article class="chart-card"><div class="chart-title"><div><h3>Velocidad media</h3><p id="speedChartSubtitle">Mbps · estimación ponderada nacional</p></div><span class="chart-index">03</span></div><div class="chart-wrap"><canvas id="speedTrendChart"></canvas></div></article>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><p class="eyebrow">BRECHAS TERRITORIALES</p><h2>Conectividad por provincia</h2></div><p class="section-aside">Comparación para el período elegido</p></div>
+        <div class="chart-grid">
+          <article class="chart-card"><div class="chart-title"><div><h3>Penetración en hogares</h3><p>Accesos cada 100 hogares</p></div><span class="chart-index">04</span></div><div class="chart-wrap chart-wrap-tall"><canvas id="penetrationChart"></canvas></div><p class="chart-footnote">El indicador es una tasa de accesos por cada 100 hogares; puede superar 100.</p></article>
+          <article class="chart-card"><div class="chart-title"><div><h3>Velocidad por provincia</h3><p>Mbps de descarga promedio</p></div><span class="chart-index">05</span></div><div class="chart-wrap chart-wrap-tall"><canvas id="provinceSpeedChart"></canvas></div></article>
+          <article class="chart-card"><div class="chart-title"><div><h3>Accesos por categoría de velocidad</h3><p>Distribución en el último período del filtro</p></div><span class="chart-index">06</span></div><div class="chart-wrap chart-wrap-tall"><canvas id="speedBandsChart"></canvas></div><p class="chart-footnote">Disponible desde 2017-T4. El CSV no incluye la definición de rangos ni unidades de cada categoría.</p></article>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><p class="eyebrow">ESCALA LOCAL</p><h2>Accesos por localidad</h2></div><span class="snapshot-chip">Corte sin fecha informada</span></div>
+        <div class="chart-grid">
+          <article class="chart-card"><div class="chart-title"><div><h3>Localidades con más accesos registrados</h3><p>Ranking construido a partir del archivo de tecnologías por localidad</p></div><span class="chart-index">07</span></div><div class="chart-wrap chart-wrap-local"><canvas id="localityChart"></canvas></div><p class="chart-footnote">Este archivo no contiene año ni trimestre. Se presenta como corte transversal.</p></article>
+          <article class="chart-card"><div class="chart-title"><div><h3>Categorías de velocidad en localidades</h3><p>Accesos agrupados por categoría original</p></div><span class="chart-index">08</span></div><div class="chart-wrap chart-wrap-local"><canvas id="localSpeedChart"></canvas></div><p class="chart-footnote">Corte transversal sin fecha informada. No se atribuyen rangos ni unidades a las categorías.</p></article>
+        </div>
+      </section>
+
+      <section class="methodology-panel">
+        <div class="method-icon">i</div><div><p class="eyebrow">CÓMO LEER ESTE DASHBOARD</p><h2>Alcance y metodología</h2><p>Los accesos nacionales se calculan sumando los totales publicados para las 24 jurisdicciones. La participación de fibra se calcula como accesos de fibra óptica sobre el total de accesos. La velocidad nacional se muestra como una <strong>estimación ponderada</strong> de las velocidades medias provinciales por cantidad de accesos; no es un valor nacional publicado directamente por ENACOM.</p><p>La penetración se informa por provincia. No se promedian tasas provinciales para presentarlas como una tasa nacional. Los archivos de localidades no incluyen período, por lo que se usan únicamente en la sección territorial.</p><p>El archivo de accesos por velocidad contiene categorías originales en la columna «Velocidad», pero no incluye en el CSV una definición de rangos o unidades; por eso no se les atribuye una interpretación adicional.</p><a href="docs/METODOLOGIA.md">Leer metodología y diccionario de datos →</a></div>
+      </section>
+    </main>
+
+    <footer class="footer"><span>Proyecto académico · Conectividad fija en Argentina</span><span>Fuente: ENACOM · Período analizado: 2014–2024</span></footer>
+  </div>
+  <div id="loading" class="loading-overlay"><div class="loader"></div><p>Cargando y procesando los datos…</p></div>
+  <div id="errorBox" class="error-box" hidden></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
