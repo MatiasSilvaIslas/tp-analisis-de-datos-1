@@ -1,0 +1,139 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1120.7497469519096,
+            "y": 205.99792851953589
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "9ccd5f07-a01d-42bc-9211-08a7a6780ff4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 886.74974695190974,
+            "y": 0.49311324171503657
+          },
+          "nodeIndex": "AccesosCategoria",
+          "nodeLineageTag": "1799d126-9f1d-4fc3-8626-61f94a4ef798",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 339.3651249087718
+          },
+          "nodeIndex": "LocalidadCategoria",
+          "nodeLineageTag": "109e4b5b-709c-48e0-93e3-28cbea8ab2fe",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 139.91316987412904,
+            "y": -50
+          },
+          "nodeIndex": "LocalidadTecnologia",
+          "nodeLineageTag": "c804cc13-5472-4bc2-ae7e-3aa1c013c9cd",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 348.6658655517632,
+            "y": 453.9814305526495
+          },
+          "nodeIndex": "Penetracion",
+          "nodeLineageTag": "0106d106-1924-4910-a62f-d73db7d96982",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 635.68816962674248,
+            "y": 227.29697878515356
+          },
+          "nodeIndex": "Periodo",
+          "nodeLineageTag": "b6a88aba-700a-4b27-8de0-b476fc16187e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 337.11118695108985,
+            "y": 226.33956681527934
+          },
+          "nodeIndex": "Provincia",
+          "nodeLineageTag": "4b31b9d1-ab0b-4bc9-b179-c183fbb3cde4",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 438.58817713905825,
+            "y": -25.448948670833033
+          },
+          "nodeIndex": "TecnologiaProvincia",
+          "nodeLineageTag": "069dfca8-8332-4814-96a1-2e6ca6f92740",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 635.65055611170271,
+            "y": 509.99585703907178
+          },
+          "nodeIndex": "Velocidad",
+          "nodeLineageTag": "7e535b02-3831-4dbc-ba75-f16132d2d095",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

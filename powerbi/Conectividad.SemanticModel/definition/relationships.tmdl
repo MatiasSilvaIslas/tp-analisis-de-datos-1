@@ -1,0 +1,40 @@
+relationship 14aebed5-fcde-4a94-9507-6168e41e48e7
+	fromColumn: TecnologiaProvincia.PeriodoKey
+	toColumn: Periodo.PeriodoKey
+
+relationship ad61f7ae-e348-4bb8-bf26-d8c4ac017e7e
+	fromColumn: TecnologiaProvincia.provincia
+	toColumn: Provincia.Provincia
+
+relationship 3e2a10c3-efa9-444e-950e-14a6fae4e395
+	fromColumn: Velocidad.PeriodoKey
+	toColumn: Periodo.PeriodoKey
+
+relationship ab344fb3-80c5-4bb2-9be7-3329a5ad0ddd
+	fromColumn: Velocidad.provincia
+	toColumn: Provincia.Provincia
+
+relationship c34fc5d6-11d9-4061-b1cf-e36eb1526279
+	fromColumn: Penetracion.PeriodoKey
+	toColumn: Periodo.PeriodoKey
+
+relationship 19398423-9a3c-4371-8bb8-7f4a0d72f7a1
+	fromColumn: Penetracion.provincia
+	toColumn: Provincia.Provincia
+
+relationship b12de15c-a26a-4115-97a5-d0b11e650b71
+	fromColumn: AccesosCategoria.PeriodoKey
+	toColumn: Periodo.PeriodoKey
+
+relationship dde6db42-2b4f-464b-a0a9-0e4064e25c86
+	fromColumn: AccesosCategoria.provincia
+	toColumn: Provincia.Provincia
+
+relationship 7f597800-7c90-46a3-a44a-01d5ac8fa465
+	fromColumn: LocalidadTecnologia.provincia
+	toColumn: Provincia.Provincia
+
+relationship 3a7a568a-8777-4177-9d44-44600079d683
+	fromColumn: LocalidadCategoria.provincia
+	toColumn: Provincia.Provincia
+

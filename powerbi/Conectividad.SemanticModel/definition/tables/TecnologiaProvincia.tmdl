@@ -1,0 +1,69 @@
+table TecnologiaProvincia
+	lineageTag: 1d945357-6f76-489a-8252-2fd5353e73ce
+
+	column PeriodoKey
+		dataType: int64
+		isHidden
+		lineageTag: 17bfa03b-8624-42a8-afdc-fc0ded5d3174
+		summarizeBy: none
+		sourceColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column provincia
+		dataType: string
+		isHidden
+		lineageTag: f69a3575-3a33-49e8-8d72-122aaad16b8f
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tecnología
+		dataType: string
+		lineageTag: 3a43ab6c-9f71-462d-87a7-f0ea815afc7d
+		summarizeBy: none
+		sourceColumn: Tecnología
+		sortByColumn: TecnologiaOrden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TecnologiaOrden
+		dataType: int64
+		isHidden
+		lineageTag: 73e2acc5-d265-4806-93b4-ccbb10960930
+		summarizeBy: none
+		sourceColumn: TecnologiaOrden
+
+		annotation SummarizationSetBy = Automatic
+
+	column accesos
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 60b23d4e-022a-42b7-b1c1-09bff8ecc808
+		summarizeBy: sum
+		sourceColumn: accesos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TecnologiaProvincia = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "accesos_tecnologia_provincia.csv") else File.Contents(CarpetaDatos & "accesos_tecnologia_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"anio", "trimestre", "periodo", "provincia", "adsl", "cablemodem", "fibra_optica", "wireless", "otros"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"anio", Int64.Type}, {"trimestre", Int64.Type}, {"periodo", type text}, {"provincia", type text}, {"adsl", Int64.Type}, {"cablemodem", Int64.Type}, {"fibra_optica", Int64.Type}, {"wireless", Int64.Type}, {"otros", Int64.Type}}, "en-US"),
+				    ConClave = Table.AddColumn(Tipos, "PeriodoKey", each [anio] * 10 + [trimestre], Int64.Type),
+				    Largo = Table.UnpivotOtherColumns(Table.RemoveColumns(ConClave, {"anio", "trimestre", "periodo"}), {"PeriodoKey", "provincia"}, "tec", "accesos"),
+				    Nombres = [adsl = "ADSL", cablemodem = "Cablemódem", fibra_optica = "Fibra óptica", wireless = "Wireless", otros = "Otros"],
+				    Ordenes = [adsl = 1, cablemodem = 2, fibra_optica = 3, wireless = 4, otros = 5],
+				    ConNombre = Table.AddColumn(Largo, "tecnologia", each Record.Field(Nombres, [tec]), type text),
+				    ConOrden = Table.AddColumn(ConNombre, "orden", each Record.Field(Ordenes, [tec]), Int64.Type),
+				    Final = Table.TransformColumnTypes(Table.RemoveColumns(ConOrden, {"tec"}), {{"accesos", Int64.Type}}),
+				    Renombrado = Table.RenameColumns(Final, {{"tecnologia", "Tecnología"}, {"orden", "TecnologiaOrden"}})
+				in
+				    Renombrado
+

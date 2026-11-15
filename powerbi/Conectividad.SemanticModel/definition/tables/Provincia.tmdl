@@ -1,0 +1,26 @@
+table Provincia
+	lineageTag: eedea272-b885-41a9-9088-37602337ae0b
+
+	column Provincia
+		dataType: string
+		lineageTag: bb83ce66-0577-4f57-8190-3619be36ed22
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Provincia = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "velocidad_provincia.csv") else File.Contents(CarpetaDatos & "velocidad_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"provincia"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"provincia", type text}}, "en-US"),
+				    Distintos = Table.Distinct(Tipos),
+				    Orden = Table.Sort(Distintos, {{"provincia", Order.Ascending}}),
+				    Renombrado = Table.RenameColumns(Orden, {{"provincia", "Provincia"}})
+				in
+				    Renombrado
+

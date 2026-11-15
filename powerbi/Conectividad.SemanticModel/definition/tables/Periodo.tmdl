@@ -1,0 +1,68 @@
+table Periodo
+	lineageTag: eb860c4d-c414-41e5-a458-44b7584779f2
+
+	column PeriodoKey
+		dataType: int64
+		isHidden
+		lineageTag: bc8ab0df-7f03-4e59-bd00-086895683251
+		summarizeBy: none
+		sourceColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: aa5ab393-b3cd-4259-ba73-aacc6d6242fa
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: string
+		lineageTag: 96cc7c46-081d-438a-b0fb-93d3140a6365
+		summarizeBy: none
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Período
+		dataType: string
+		lineageTag: d45171cf-1be6-4b77-b2c5-111ec489cf50
+		summarizeBy: none
+		sourceColumn: Período
+		sortByColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a2d983ca-e179-4da6-a5ec-fcdf185ed21c
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Periodo = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "velocidad_provincia.csv") else File.Contents(CarpetaDatos & "velocidad_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"anio", "trimestre", "periodo"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"anio", Int64.Type}, {"trimestre", Int64.Type}, {"periodo", type text}}, "en-US"),
+				    Distintos = Table.Distinct(Tipos),
+				    ConClave = Table.AddColumn(Distintos, "PeriodoKey", each [anio] * 10 + [trimestre], Int64.Type),
+				    ConTrim = Table.AddColumn(ConClave, "trim_txt", each "T" & Text.From([trimestre]), type text),
+				    ConFecha = Table.AddColumn(ConTrim, "fecha", each #date([anio], ([trimestre] - 1) * 3 + 1, 1), type date),
+				    Orden = Table.Sort(ConFecha, {{"PeriodoKey", Order.Ascending}}),
+				    Final = Table.SelectColumns(Orden, {"PeriodoKey", "anio", "trim_txt", "periodo", "fecha"}),
+				    Renombrado = Table.RenameColumns(Final, {{"anio", "Año"}, {"trim_txt", "Trimestre"}, {"fecha", "Fecha"}, {"periodo", "Período"}})
+				in
+				    Renombrado
+

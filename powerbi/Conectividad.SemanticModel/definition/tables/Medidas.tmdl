@@ -1,0 +1,174 @@
+table Medidas
+	lineageTag: 27b5f522-d330-4d09-b709-d536038faec5
+
+	measure Accesos = SUM ( TecnologiaProvincia[accesos] )
+		formatString: #,0
+		lineageTag: f2a2d486-9dac-485c-a434-c6d86971a874
+
+	measure 'Accesos fibra óptica' = CALCULATE ( [Accesos], TecnologiaProvincia[Tecnología] = "Fibra óptica" )
+		formatString: #,0
+		lineageTag: 285b1ce2-e7a3-48c4-b277-0d17d2e73b52
+
+	measure 'Último período (clave)' = CALCULATE ( MAX ( TecnologiaProvincia[PeriodoKey] ), REMOVEFILTERS ( Provincia ) )
+		formatString: 0
+		lineageTag: fd9aaa66-bd64-4f6d-a875-5aa36a9edf3d
+
+	measure 'Período actual' = LOOKUPVALUE ( Periodo[Período], Periodo[PeriodoKey], [Último período (clave)] )
+		lineageTag: 067f8ae5-e73c-4597-a535-50590ba4c265
+
+	measure 'Accesos (último período)' =
+			VAR k = [Último período (clave)]
+			RETURN
+			    CALCULATE ( [Accesos], Periodo[PeriodoKey] = k )
+		formatString: #,0
+		lineageTag: 637efba7-e19b-4cb5-ae0a-55e4644a7696
+
+	measure 'Accesos fibra (último período)' =
+			VAR k = [Último período (clave)]
+			RETURN
+			    CALCULATE ( [Accesos fibra óptica], Periodo[PeriodoKey] = k )
+		formatString: #,0
+		lineageTag: 0765170e-7e36-478d-9032-dbadfc930c3e
+
+	measure '% fibra (último período)' = DIVIDE ( [Accesos fibra (último período)], [Accesos (último período)] )
+		formatString: 0.0%
+		lineageTag: b50028bc-c716-44c5-a90e-2b5542679457
+
+	measure 'Velocidad media (Mbps)' =
+			-- Promedio de velocidades provinciales ponderado por accesos (igual que el dashboard HTML)
+			VAR t =
+			    ADDCOLUMNS (
+			        SUMMARIZE ( Velocidad, Provincia[Provincia], Periodo[PeriodoKey] ),
+			        "@v", CALCULATE ( AVERAGE ( Velocidad[mbps_media] ) ),
+			        "@a", CALCULATE ( [Accesos] )
+			    )
+			VAR tv = FILTER ( t, NOT ISBLANK ( [@v] ) && NOT ISBLANK ( [@a] ) )
+			RETURN
+			    DIVIDE ( SUMX ( tv, [@v] * [@a] ), SUMX ( tv, [@a] ) )
+		formatString: #,0.0
+		lineageTag: 8a11d94d-d109-45ef-85d1-40147616a1a7
+
+	measure 'Velocidad (último período)' =
+			VAR k = [Último período (clave)]
+			RETURN
+			    CALCULATE ( [Velocidad media (Mbps)], Periodo[PeriodoKey] = k )
+		formatString: #,0.0
+		lineageTag: 802f4a5e-ae5f-47b9-b430-b2a4b879049c
+
+	measure 'Penetración hogares (último período)' =
+			VAR k = [Último período (clave)]
+			RETURN
+			    CALCULATE ( SELECTEDVALUE ( Penetracion[accesos_100_hogares] ), Periodo[PeriodoKey] = k )
+		formatString: #,0.0
+		lineageTag: a128ad68-5875-456c-9656-e2add68c8bef
+
+	measure 'KPI accesos' = FORMAT ( [Accesos (último período)], "#,0" )
+		lineageTag: 26230f72-ddbd-4d94-8407-1f11b3694dec
+
+	measure 'KPI fibra' = IF ( ISBLANK ( [% fibra (último período)] ), "—", FORMAT ( [% fibra (último período)], "0.0%" ) )
+		lineageTag: afdb17f9-c495-493c-8ed5-cdee9b704504
+
+	measure 'KPI velocidad' = IF ( ISBLANK ( [Velocidad (último período)] ), "—", FORMAT ( [Velocidad (último período)], "#,0.0" ) & " Mbps" )
+		lineageTag: 34aafd5e-318b-48c6-a4dd-b40ada413f69
+
+	measure 'KPI penetración' =
+			IF (
+			    HASONEVALUE ( Provincia[Provincia] ) && NOT ISBLANK ( [Penetración hogares (último período)] ),
+			    FORMAT ( [Penetración hogares (último período)], "#,0.0" ),
+			    "—"
+			)
+		lineageTag: 7d9f3a54-5104-451d-8869-71f13efb60c4
+
+	measure 'Nota accesos' = IF ( ISBLANK ( [Último período (clave)] ), "Sin datos para los filtros elegidos", "Último período del filtro · " & [Período actual] )
+		lineageTag: 6a137127-7ae8-46c6-8916-61fa95bd9b3d
+
+	measure 'Nota fibra' = FORMAT ( [Accesos fibra (último período)], "#,0" ) & " accesos de fibra óptica · " & [Período actual]
+		lineageTag: d11e0ddc-4412-4b87-ab82-b3fd278ec5ce
+
+	measure 'Nota velocidad' = IF ( HASONEVALUE ( Provincia[Provincia] ), "Dato provincial · " & [Período actual], "Estimación ponderada · " & [Período actual] )
+		lineageTag: fef063f3-d802-4a42-8184-2faaf24fe8b0
+
+	measure 'Nota penetración' = IF ( HASONEVALUE ( Provincia[Provincia] ), "Accesos cada 100 hogares · " & [Período actual], "Elegí una provincia para consultar" )
+		lineageTag: 2bf394c9-c707-43bf-afab-5a00a6c03348
+
+	measure 'Etiqueta filtros' =
+			IF ( HASONEVALUE ( Periodo[Año] ), FORMAT ( VALUES ( Periodo[Año] ), "0" ), "2014–2024" )
+			    & IF ( HASONEVALUE ( Periodo[Trimestre] ), " · " & VALUES ( Periodo[Trimestre] ) )
+			    & IF ( HASONEVALUE ( Provincia[Provincia] ), " · " & VALUES ( Provincia[Provincia] ) )
+		lineageTag: 6283caf5-4a54-40a0-9d6b-524fa585c052
+
+	measure 'Accesos categoría (último período)' =
+			VAR k =
+			    CALCULATE ( MAX ( AccesosCategoria[PeriodoKey] ), REMOVEFILTERS ( AccesosCategoria[Categoría de velocidad] ) )
+			RETURN
+			    CALCULATE ( SUM ( AccesosCategoria[accesos] ), Periodo[PeriodoKey] = k )
+		formatString: #,0
+		lineageTag: 20f3ba1d-441f-4f6b-a818-bae208d5d9ce
+
+	measure 'Accesos categoría Top 12' =
+			VAR v = [Accesos categoría (último período)]
+			VAR r =
+			    RANKX ( ALLSELECTED ( AccesosCategoria[Categoría de velocidad] ), [Accesos categoría (último período)], , DESC, DENSE )
+			RETURN
+			    IF ( NOT ISBLANK ( v ) && r <= 12, v )
+		formatString: #,0
+		lineageTag: 75fbae59-b8bb-4aad-bc45-3cfd95feee87
+
+	measure 'Accesos localidad' = SUM ( LocalidadTecnologia[accesos] )
+		formatString: #,0
+		lineageTag: 845d2688-c2f6-42b0-8efa-4275f0260940
+
+	measure 'Accesos localidad Top 12' =
+			VAR v = [Accesos localidad]
+			VAR r = RANKX ( ALLSELECTED ( LocalidadTecnologia[Localidad · partido] ), [Accesos localidad], , DESC, DENSE )
+			RETURN
+			    IF ( NOT ISBLANK ( v ) && r <= 12, v )
+		formatString: #,0
+		lineageTag: 6c1679a4-bdd5-431a-86ca-b4cc64d16894
+
+	measure 'Accesos categoría localidad' = SUM ( LocalidadCategoria[accesos] )
+		formatString: #,0
+		lineageTag: 1179b7ca-1d14-4702-a8c3-fc8e17785f2d
+
+	measure 'Accesos categoría localidad Top 12' =
+			VAR v = [Accesos categoría localidad]
+			VAR r =
+			    RANKX ( ALLSELECTED ( LocalidadCategoria[Categoría de velocidad] ), [Accesos categoría localidad], , DESC, DENSE )
+			RETURN
+			    IF ( NOT ISBLANK ( v ) && r <= 12, v )
+		formatString: #,0
+		lineageTag: 1ba26767-3846-40f8-ac40-02c1afb84b39
+
+	measure 'Color penetración' =
+			VAR v = [Penetración hogares (último período)]
+			VAR n = COUNTROWS ( FILTER ( ALLSELECTED ( Provincia[Provincia] ), NOT ISBLANK ( [Penetración hogares (último período)] ) ) )
+			VAR r = RANKX ( ALLSELECTED ( Provincia[Provincia] ), [Penetración hogares (último período)], , DESC )
+			RETURN
+			    IF ( ISBLANK ( v ), BLANK (), IF ( r <= 3, "#55d6d2", IF ( r > n - 3, "#ffb86b", "#4f6290" ) ) )
+		lineageTag: cbdc1870-646c-421a-a4ba-631c1d1dcbb6
+
+	measure 'Color velocidad' =
+			VAR v = [Velocidad (último período)]
+			VAR n = COUNTROWS ( FILTER ( ALLSELECTED ( Provincia[Provincia] ), NOT ISBLANK ( [Velocidad (último período)] ) ) )
+			VAR r = RANKX ( ALLSELECTED ( Provincia[Provincia] ), [Velocidad (último período)], , DESC )
+			RETURN
+			    IF ( ISBLANK ( v ), BLANK (), IF ( r <= 3, "#55d6d2", IF ( r > n - 3, "#ffb86b", "#6a5a9e" ) ) )
+		lineageTag: 9deda05b-59c3-4095-ae59-aa6e323d765f
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: 4c7f9961-e4c4-46c5-a60f-593d7b32df13
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [Dummy = text], {})
+				in
+				    Origen
+

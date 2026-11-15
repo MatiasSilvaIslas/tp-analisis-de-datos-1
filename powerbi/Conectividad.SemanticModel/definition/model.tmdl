@@ -1,0 +1,25 @@
+model Model
+	culture: es-AR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: es-AR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["CarpetaDatos", "Periodo", "Provincia", "TecnologiaProvincia", "Velocidad", "Penetracion", "AccesosCategoria", "LocalidadTecnologia", "LocalidadCategoria", "Medidas"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Periodo
+ref table Provincia
+ref table TecnologiaProvincia
+ref table Velocidad
+ref table Penetracion
+ref table AccesosCategoria
+ref table LocalidadTecnologia
+ref table LocalidadCategoria
+ref table Medidas
+

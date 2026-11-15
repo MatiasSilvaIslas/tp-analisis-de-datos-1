@@ -1,0 +1,54 @@
+table AccesosCategoria
+	lineageTag: 9d4331fd-ed1d-4af0-a23f-d1eb3c62128b
+
+	column PeriodoKey
+		dataType: int64
+		isHidden
+		lineageTag: f3ae3647-aad9-4f50-8d74-8a5fd84ab9fe
+		summarizeBy: none
+		sourceColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column provincia
+		dataType: string
+		isHidden
+		lineageTag: 32345219-976a-430c-bce4-7cf910390d4b
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoría de velocidad'
+		dataType: string
+		lineageTag: f92167fb-9159-436f-bc6c-338404c79ca0
+		summarizeBy: none
+		sourceColumn: Categoría de velocidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column accesos
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 5c873e81-2040-4a75-a063-eab9f0b9b9d0
+		summarizeBy: sum
+		sourceColumn: accesos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition AccesosCategoria = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "accesos_categoria_provincia.csv") else File.Contents(CarpetaDatos & "accesos_categoria_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"anio", "trimestre", "periodo", "provincia", "categoria_velocidad", "accesos"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"anio", Int64.Type}, {"trimestre", Int64.Type}, {"periodo", type text}, {"provincia", type text}, {"categoria_velocidad", type text}, {"accesos", Int64.Type}}, "en-US"),
+				    ConClave = Table.AddColumn(Tipos, "PeriodoKey", each [anio] * 10 + [trimestre], Int64.Type),
+				    Final = Table.RemoveColumns(ConClave, {"anio", "trimestre", "periodo"}),
+				    Renombrado = Table.RenameColumns(Final, {{"categoria_velocidad", "Categoría de velocidad"}})
+				in
+				    Renombrado
+
