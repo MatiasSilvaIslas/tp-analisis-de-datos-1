@@ -1,0 +1,5 @@
+expression CarpetaDatos = "https://raw.githubusercontent.com/MatiasSilvaIslas/tp-analisis-de-datos-1/main/data/modified/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 763160d1-5d0e-4fb8-8cc6-7a2402b52d8e
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,68 @@
+table LocalidadTecnologia
+	lineageTag: 417b0255-9469-4c83-81a8-e1df1566d833
+
+	column provincia
+		dataType: string
+		isHidden
+		lineageTag: 8448d92d-4090-4810-9001-688cfc01837d
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Partido
+		dataType: string
+		lineageTag: eafa7032-8a52-40f5-a062-2600560abee0
+		summarizeBy: none
+		sourceColumn: Partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Localidad
+		dataType: string
+		lineageTag: 2891401d-0ccc-4d73-838b-11a2e9f469ac
+		summarizeBy: none
+		sourceColumn: Localidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Localidad · partido'
+		dataType: string
+		lineageTag: 1d6b3903-f082-46f4-b6e3-4be85f962567
+		summarizeBy: none
+		sourceColumn: Localidad · partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column tecnologia
+		dataType: string
+		lineageTag: a033e6d5-587c-4995-8968-84ef296997f6
+		summarizeBy: none
+		sourceColumn: tecnologia
+
+		annotation SummarizationSetBy = Automatic
+
+	column accesos
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: a78eb8b9-bd46-488e-a4c7-efa8037f5e28
+		summarizeBy: sum
+		sourceColumn: accesos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition LocalidadTecnologia = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "accesos_tecnologia_localidad.csv") else File.Contents(CarpetaDatos & "accesos_tecnologia_localidad.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"provincia", "partido", "localidad", "tecnologia", "accesos"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"provincia", type text}, {"partido", type text}, {"localidad", type text}, {"tecnologia", type text}, {"accesos", Int64.Type}}, "en-US"),
+				    Etiqueta = Table.AddColumn(Tipos, "etiqueta", each [localidad] & " · " & [partido] & " (" & [provincia] & ")", type text),
+				    Renombrado = Table.RenameColumns(Etiqueta, {{"partido", "Partido"}, {"localidad", "Localidad"}, {"etiqueta", "Localidad · partido"}})
+				in
+				    Renombrado
+

@@ -1,0 +1,135 @@
+{
+  "name": "Conectividad oscuro",
+  "dataColors": [
+    "#55d6d2",
+    "#7d9cff",
+    "#ad91ff",
+    "#80dfb4",
+    "#ffb86b",
+    "#ff8c9b"
+  ],
+  "background": "#131d33",
+  "foreground": "#f3f6fc",
+  "tableAccent": "#55d6d2",
+  "good": "#80dfb4",
+  "bad": "#ff8c9b",
+  "textClasses": {
+    "label": {
+      "color": "#9aa9c2",
+      "fontFace": "Segoe UI",
+      "fontSize": 9
+    },
+    "callout": {
+      "color": "#f3f6fc",
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 24
+    },
+    "title": {
+      "color": "#f3f6fc",
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12
+    },
+    "header": {
+      "color": "#f3f6fc",
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#131d33"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#24304a"
+              }
+            },
+            "radius": 14
+          }
+        ],
+        "categoryAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#9aa9c2"
+              }
+            },
+            "gridlineShow": false
+          }
+        ],
+        "valueAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#9aa9c2"
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": "#1f2a42"
+              }
+            }
+          }
+        ],
+        "legend": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#9aa9c2"
+              }
+            }
+          }
+        ],
+        "visualHeader": [
+          {
+            "background": {
+              "solid": {
+                "color": "#131d33"
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": "#9aa9c2"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#0b1020"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#0b1020"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

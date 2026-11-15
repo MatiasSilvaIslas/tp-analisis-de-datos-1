@@ -1,0 +1,45 @@
+table Velocidad
+	lineageTag: ed445fc7-e5ed-494e-9e75-2e419dd3193a
+
+	column PeriodoKey
+		dataType: int64
+		isHidden
+		lineageTag: 7efc4155-a10d-4c80-8759-e0508deb96eb
+		summarizeBy: none
+		sourceColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column provincia
+		dataType: string
+		isHidden
+		lineageTag: 6bc5959e-9084-4329-9cfc-fbc644f6d7c7
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column mbps_media
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 984af895-82c4-4c52-8882-a9df575f015c
+		summarizeBy: none
+		sourceColumn: mbps_media
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Velocidad = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "velocidad_provincia.csv") else File.Contents(CarpetaDatos & "velocidad_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"anio", "trimestre", "periodo", "provincia", "mbps_media"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"anio", Int64.Type}, {"trimestre", Int64.Type}, {"periodo", type text}, {"provincia", type text}, {"mbps_media", type number}}, "en-US"),
+				    ConClave = Table.AddColumn(Tipos, "PeriodoKey", each [anio] * 10 + [trimestre], Int64.Type),
+				    Final = Table.RemoveColumns(ConClave, {"anio", "trimestre", "periodo"})
+				in
+				    Final
+

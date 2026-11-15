@@ -1,0 +1,55 @@
+table Penetracion
+	lineageTag: 1984d365-4474-4ddc-a92c-bd8ab92cf79a
+
+	column PeriodoKey
+		dataType: int64
+		isHidden
+		lineageTag: 3df1cad4-5a77-46a1-afc9-03f86e01357f
+		summarizeBy: none
+		sourceColumn: PeriodoKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column provincia
+		dataType: string
+		isHidden
+		lineageTag: 6c92b7da-f38b-4239-b2e1-2c951deb1eea
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column accesos_100_hogares
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: c2ee95d3-f034-4b65-9a41-236643d458b0
+		summarizeBy: none
+		sourceColumn: accesos_100_hogares
+
+		annotation SummarizationSetBy = Automatic
+
+	column accesos_100_habitantes
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: e71cf1e6-f40d-4882-9107-53a343550c78
+		summarizeBy: none
+		sourceColumn: accesos_100_habitantes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Penetracion = m
+		mode: import
+		source =
+				let
+				    Archivo = if Text.StartsWith(CarpetaDatos, "http") then Web.Contents(CarpetaDatos & "penetracion_provincia.csv") else File.Contents(CarpetaDatos & "penetracion_provincia.csv"),
+				    Origen = Csv.Document(Archivo, [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Columnas = Table.SelectColumns(Encabezados, {"anio", "trimestre", "periodo", "provincia", "accesos_100_hogares", "accesos_100_habitantes"}),
+				    Tipos = Table.TransformColumnTypes(Columnas, {{"anio", Int64.Type}, {"trimestre", Int64.Type}, {"periodo", type text}, {"provincia", type text}, {"accesos_100_hogares", type number}, {"accesos_100_habitantes", type number}}, "en-US"),
+				    ConClave = Table.AddColumn(Tipos, "PeriodoKey", each [anio] * 10 + [trimestre], Int64.Type),
+				    Final = Table.RemoveColumns(ConClave, {"anio", "trimestre", "periodo"})
+				in
+				    Final
+
