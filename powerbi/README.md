@@ -29,9 +29,10 @@ C:\ruta\al\repo\tp-analisis-de-datos-1\data\modified\
 | 1 · Resumen | KPIs (último período del filtro) y evolución de accesos totales y de fibra |
 | 2 · Cambio tecnológico | Composición tecnológica (100 %) y velocidad media ponderada |
 | 3 · Brechas provinciales | Penetración y velocidad por provincia (3 más altas / 3 más bajas resaltadas) |
+| 4 · Conclusiones | Respuesta a la hipótesis: evolución de la brecha entre provincias (CV y máximo/mínimo), veredicto, limitaciones y mejoras futuras |
 | Anexo | Categorías de velocidad, localidades y metodología |
 
-Los filtros de Año, Trimestre y Provincia están sincronizados entre las páginas 1 a 3.
+Los filtros de Año, Trimestre y Provincia están sincronizados entre las páginas 1 a 3. La página 4 no tiene filtros: siempre muestra la serie completa 2014–2024 de las 24 jurisdicciones.
 
 ## Estructura
 

@@ -155,6 +155,30 @@ table Medidas
 			    IF ( ISBLANK ( v ), BLANK (), IF ( r <= 3, "#55d6d2", IF ( r > n - 3, "#ffb86b", "#6a5a9e" ) ) )
 		lineageTag: 9deda05b-59c3-4095-ae59-aa6e323d765f
 
+	measure 'CV penetración entre provincias' =
+			-- Coeficiente de variación (desvío muestral / media) de accesos cada 100 hogares entre provincias, por período
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Provincia[Provincia] ), "@p", CALCULATE ( AVERAGE ( Penetracion[accesos_100_hogares] ) ) ), NOT ISBLANK ( [@p] ) )
+			RETURN
+			    DIVIDE ( STDEVX.S ( t, [@p] ), AVERAGEX ( t, [@p] ) )
+		formatString: 0%
+		lineageTag: b3202aaa-60de-4e1a-8b0f-cd5d1f8e8dc7
+
+	measure 'Penetración máxima provincial' =
+			-- Mayor valor provincial de accesos cada 100 hogares en el período
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Provincia[Provincia] ), "@p", CALCULATE ( AVERAGE ( Penetracion[accesos_100_hogares] ) ) ), NOT ISBLANK ( [@p] ) )
+			RETURN
+			    MAXX ( t, [@p] )
+		formatString: #,0.0
+		lineageTag: d9ebb024-19ca-466c-aced-aa6b3dde445b
+
+	measure 'Penetración mínima provincial' =
+			-- Menor valor provincial de accesos cada 100 hogares en el período
+			VAR t = FILTER ( ADDCOLUMNS ( VALUES ( Provincia[Provincia] ), "@p", CALCULATE ( AVERAGE ( Penetracion[accesos_100_hogares] ) ) ), NOT ISBLANK ( [@p] ) )
+			RETURN
+			    MINX ( t, [@p] )
+		formatString: #,0.0
+		lineageTag: 39b03aa2-83e9-45d7-8712-c5f2c9ec9b64
+
 	column Dummy
 		dataType: string
 		isHidden

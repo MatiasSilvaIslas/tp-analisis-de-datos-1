@@ -43,6 +43,7 @@ conectividad-fija-argentina/
 │   ├── METODOLOGIA.md            # Decisiones metodológicas y limitaciones
 │   ├── DICCIONARIO_DE_DATOS.md   # Descripción de fuentes y campos
 │   ├── ANALISIS_INICIAL.md       # Comparación descriptiva 2014-T1 vs 2024-T4
+│   ├── CONCLUSIONES.md           # Punto 5: respuesta a la hipótesis, limitaciones y mejoras
 │   ├── AUDITORIA_DATOS.md
 │   ├── MODELO_DATOS.md
 │   └── CONSULTAS_SQL.md
@@ -138,6 +139,8 @@ python -m pip install -r requirements.txt
 python scripts/load_sqlite.py
 python -m jupyter notebook notebooks/02_EDA_conectividad_fija_v2.ipynb
 ```
+
+El cierre del análisis está en `notebooks/03_cierre_hipotesis.ipynb`: evalúa cada parte de la hipótesis con la misma base y guarda sus tablas en `notebooks/salidas_cierre/`. La síntesis para la exposición está en [`docs/CONCLUSIONES.md`](docs/CONCLUSIONES.md).
 
 En VS Code/Jupyter, seleccionar el intérprete de `.venv` como kernel. El notebook encuentra `database/conectividad.db` desde la raíz del repo o desde `notebooks/` y la abre en modo solo lectura. Las tablas de resultados se guardan en `notebooks/salidas_eda/`.
 
