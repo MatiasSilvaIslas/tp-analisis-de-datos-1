@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "anexo_titulo",
   "position": {
     "x": 24,
     "y": 12,
-    "z": 30000,
-    "height": 70,
+    "z": 1000,
+    "height": 118,
     "width": 1232,
-    "tabOrder": 30000
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,12 +19,12 @@
               {
                 "textRuns": [
                   {
-                    "value": "ANEXO",
+                    "value": "TECNOLOGÍAS POR PROVINCIA",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI",
                       "fontSize": "10pt",
-                      "color": "#55d6d2",
-                      "fontWeight": "bold"
+                      "color": "#55d6d2"
                     }
                   }
                 ]
@@ -32,12 +32,24 @@
               {
                 "textRuns": [
                   {
-                    "value": "Datos complementarios y metodología",
+                    "value": "Cablemódem y fibra concentran casi 9 de cada 10 accesos",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "22pt",
-                      "color": "#f3f6fc",
-                      "fontWeight": "bold"
+                      "fontSize": "26pt",
+                      "color": "#f3f6fc"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Cantidad de accesos por tecnología y cómo se reparte en cada provincia · último trimestre del filtro",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13pt",
+                      "color": "#aab8d0"
                     }
                   }
                 ]

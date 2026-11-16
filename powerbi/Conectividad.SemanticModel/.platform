@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Conectividad"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "36a404aa-d77b-42a5-9df5-30adf46d7b5c"
+  }
+}

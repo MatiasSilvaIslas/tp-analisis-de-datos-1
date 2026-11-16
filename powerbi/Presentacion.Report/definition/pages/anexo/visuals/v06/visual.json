@@ -3,32 +3,31 @@
   "name": "v06",
   "position": {
     "x": 24,
-    "y": 90,
-    "z": 31000,
-    "height": 300,
-    "width": 610,
-    "tabOrder": 31000
+    "y": 204,
+    "z": 7000,
+    "height": 500,
+    "width": 420,
+    "tabOrder": 7000
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "pieChart",
     "query": {
       "queryState": {
-        "Category": {
+        "Series": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "AccesosCategoria"
+                      "Entity": "TecnologiaProvincia"
                     }
                   },
-                  "Property": "Categoría de velocidad"
+                  "Property": "Tecnología"
                 }
               },
-              "queryRef": "AccesosCategoria.Categoría de velocidad",
-              "nativeQueryRef": "Categoría de velocidad",
-              "active": true
+              "queryRef": "TecnologiaProvincia.Tecnología",
+              "nativeQueryRef": "Tecnología"
             }
           ]
         },
@@ -36,17 +35,37 @@
           "projections": [
             {
               "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas"
+                "Arithmetic": {
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas"
+                        }
+                      },
+                      "Property": "Accesos (último período)"
                     }
                   },
-                  "Property": "Accesos categoría Top 12"
+                  "Right": {
+                    "ScopedEval": {
+                      "Expression": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "Medidas"
+                            }
+                          },
+                          "Property": "Accesos (último período)"
+                        }
+                      },
+                      "Scope": []
+                    }
+                  },
+                  "Operator": 3
                 }
               },
-              "queryRef": "Medidas.Accesos categoría Top 12",
-              "nativeQueryRef": "Accesos categoría Top 12"
+              "queryRef": "Divide(Medidas.Accesos (último período), ScopedEval(Medidas.Accesos (último período), []))",
+              "nativeQueryRef": "%TG Accesos (último período)"
             }
           ]
         }
@@ -55,45 +74,28 @@
         "sort": [
           {
             "field": {
-              "Measure": {
+              "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Medidas"
+                    "Entity": "TecnologiaProvincia"
                   }
                 },
-                "Property": "Accesos categoría Top 12"
+                "Property": "Tecnología"
               }
             },
-            "direction": "Descending"
+            "direction": "Ascending"
           }
         ]
       }
     },
     "objects": {
-      "dataPoint": [
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#ffb86b'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -114,84 +116,18 @@
                   "Value": "10D"
                 }
               }
-            }
-          }
-        }
-      ],
-      "categoryAxis": [
-        {
-          "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#9aa9c2'"
-                    }
-                  }
-                }
-              }
             },
-            "fontSize": {
+            "labelStyle": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "'Category, percent of total'"
                 }
               }
             },
-            "showAxisTitle": {
+            "percentageLabelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "gridlineShow": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "valueAxis": [
-        {
-          "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#9aa9c2'"
-                    }
-                  }
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            },
-            "showAxisTitle": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "gridlineColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1f2a42'"
-                    }
-                  }
+                  "Value": "1L"
                 }
               }
             }
@@ -201,6 +137,13 @@
       "legend": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "labelColor": {
               "solid": {
                 "color": {
@@ -306,7 +249,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Accesos por categoría de velocidad'"
+                  "Value": "'Accesos por tecnología'"
                 }
               }
             },
@@ -351,7 +294,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Top 12 · último período · el CSV no define rangos ni unidades'"
+                  "Value": "'Participación de cada tecnología en el último trimestre del filtro'"
                 }
               }
             },
@@ -370,6 +313,20 @@
               "expr": {
                 "Literal": {
                   "Value": "11D"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

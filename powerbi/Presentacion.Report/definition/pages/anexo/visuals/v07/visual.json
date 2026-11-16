@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v07",
   "position": {
-    "x": 646,
-    "y": 90,
-    "z": 32000,
-    "height": 300,
-    "width": 610,
-    "tabOrder": 32000
+    "x": 456,
+    "y": 204,
+    "z": 8000,
+    "height": 500,
+    "width": 800,
+    "tabOrder": 8000
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "barChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,15 +20,33 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "LocalidadTecnologia"
+                      "Entity": "Provincia"
                     }
                   },
-                  "Property": "Localidad · partido"
+                  "Property": "Provincia"
                 }
               },
-              "queryRef": "LocalidadTecnologia.Localidad · partido",
-              "nativeQueryRef": "Localidad · partido",
+              "queryRef": "Provincia.Provincia",
+              "nativeQueryRef": "Provincia",
               "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TecnologiaProvincia"
+                    }
+                  },
+                  "Property": "Tecnología"
+                }
+              },
+              "queryRef": "TecnologiaProvincia.Tecnología",
+              "nativeQueryRef": "Tecnología"
             }
           ]
         },
@@ -42,11 +60,11 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Accesos localidad Top 12"
+                  "Property": "Accesos (último período)"
                 }
               },
-              "queryRef": "Medidas.Accesos localidad Top 12",
-              "nativeQueryRef": "Accesos localidad Top 12"
+              "queryRef": "Medidas.Accesos (último período)",
+              "nativeQueryRef": "Accesos (último período)"
             }
           ]
         }
@@ -61,7 +79,7 @@
                     "Entity": "Medidas"
                   }
                 },
-                "Property": "Accesos localidad Top 12"
+                "Property": "Accesos (último período)"
               }
             },
             "direction": "Descending"
@@ -70,23 +88,6 @@
       }
     },
     "objects": {
-      "dataPoint": [
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#55d6d2'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
       "labels": [
         {
           "properties": {
@@ -94,24 +95,6 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#f3f6fc'"
-                    }
-                  }
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "10D"
                 }
               }
             }
@@ -201,6 +184,13 @@
       "legend": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "labelColor": {
               "solid": {
                 "color": {
@@ -306,7 +296,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Localidades con más accesos'"
+                  "Value": "'Tecnologías en cada provincia'"
                 }
               }
             },
@@ -351,7 +341,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Corte sin fecha informada (no responde al filtro de período)'"
+                  "Value": "'Accesos por provincia, divididos por tipo de conexión · último trimestre del filtro'"
                 }
               }
             },
